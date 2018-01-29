@@ -2,8 +2,8 @@
 //  ViewController.swift
 //  TableViewAutoSizing
 //
-//  Created by PAC on 1/29/18.
-//  Copyright © 2018 PAC. All rights reserved.
+//  Created by John Nik on 1/29/18.
+//  Copyright © 2018 johnik703. All rights reserved.
 //
 
 import UIKit
@@ -21,6 +21,13 @@ class ViewController: UIViewController {
         return tv
     }()
     
+    lazy var inputContainerView: ChatInputContainerView = {
+        let containerView = ChatInputContainerView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 50))
+        containerView.viewController = self
+        
+        return containerView
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -35,6 +42,23 @@ class ViewController: UIViewController {
             textView.heightAnchor.constraint(equalToConstant: 50)
             ].forEach{ $0.isActive = true }
         
+        textViewDidChange(textView)
+    }
+    
+    override var inputAccessoryView: UIView? {
+        
+        get {
+            return inputContainerView
+        }
+    }
+    
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
+    
+    @objc func handleSend() {
+        textView.text = inputContainerView.textView.text
+        inputContainerView.textView.text = nil
         textViewDidChange(textView)
     }
 
